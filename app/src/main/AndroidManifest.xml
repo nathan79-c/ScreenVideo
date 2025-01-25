@@ -38,18 +38,10 @@
             </intent-filter>
         </activity>
 
-        <!-- Service pour la projection d'écran -->
         <service
-            android:name=".data.ScreenRecordingService"
-            android:exported="false"
-            android:permission="android.permission.FOREGROUND_SERVICE"
-            android:foregroundServiceType="mediaProjection">
-            <intent-filter>
-                <action android:name="android.intent.action.MEDIA_PROJECTION_SERVICE" />
-            </intent-filter>
-            <meta-data
-                android:name="android.service.media.projection.FOREGROUND_SERVICE_TYPE"
-                android:value="mediaProjection" />
+            android:name=".MyMediaProjectionService"
+            android:foregroundServiceType="mediaProjection"
+            android:exported="false">
         </service>
 
     </application>
