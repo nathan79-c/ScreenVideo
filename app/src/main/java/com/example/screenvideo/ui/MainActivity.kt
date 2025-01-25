@@ -1,4 +1,4 @@
-package com.example.screenvideo
+package com.example.screenvideo.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
