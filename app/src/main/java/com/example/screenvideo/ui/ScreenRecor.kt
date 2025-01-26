@@ -32,7 +32,11 @@ import androidx.compose.ui.unit.dp
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun ScreenRecordApp(initialIsPlaying: Boolean = false) {
+fun ScreenRecordApp(
+    initialIsPlaying: Boolean = false,
+    onStartService: () -> Unit,
+    onStopService: () -> Unit
+) {
     var isPlaying by remember { mutableStateOf(initialIsPlaying) }
 
     Card(
@@ -49,10 +53,16 @@ fun ScreenRecordApp(initialIsPlaying: Boolean = false) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-
             // Bouton Play/Pause avec Material Icons
             IconButton(
-                onClick = { isPlaying = !isPlaying },
+                onClick = {
+                    isPlaying = !isPlaying
+                    if (isPlaying) {
+                        onStartService() // Lancer le service
+                    } else {
+                        onStopService() // Arrêter le service
+                    }
+                },
                 modifier = Modifier
                     .size(72.dp)
                     .background(Color(0xFFE0F7FA), shape = CircleShape)
@@ -69,9 +79,9 @@ fun ScreenRecordApp(initialIsPlaying: Boolean = false) {
                 )
             }
 
-            // Bouton Sauvegarder avec Material Icons
+            // Bouton Sauvegarder (actuellement sans action spécifique)
             IconButton(
-                onClick = { /* Action de sauvegarde */ },
+                onClick = { /* Action de sauvegarde à implémenter */ },
                 modifier = Modifier
                     .size(64.dp)
                     .background(Color(0xFFFFEB3B), shape = CircleShape)
@@ -89,25 +99,4 @@ fun ScreenRecordApp(initialIsPlaying: Boolean = false) {
 }
 
 
-@Preview(showBackground = true, name = "Play State")
-@Composable
-fun PreviewPlay() {
-    ScreenRecordApp(initialIsPlaying = false)
-}
 
-@Preview(showBackground = true, name = "Pause State")
-@Composable
-fun PreviewPause() {
-    ScreenRecordApp(initialIsPlaying =true )
-}
-
-@Preview(showBackground = true, name = "Full Preview")
-@Composable
-fun FullPreview() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.BottomCenter
-    ) {
-        ScreenRecordApp()
-    }
-}
