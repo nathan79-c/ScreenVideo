@@ -26,23 +26,15 @@ class MainActivity : ComponentActivity() {
                     contentAlignment = Alignment.Center
                 ) {
                     ScreenRecordApp(
-                        onStartService = { startScreenCaptureService() },
-                        onStopService = { stopScreenCaptureService() }
+                        onStartService = {  },
+                        onStopService = {  }
                     )
                 }
             }
         }
     }
 
-    private fun startScreenCaptureService() {
-        val intent = Intent(this, ScreenCaptureService::class.java)
-        startService(intent)
-    }
 
-    private fun stopScreenCaptureService() {
-        val intent = Intent(this, ScreenCaptureService::class.java)
-        stopService(intent)
-    }
 }
 
 
