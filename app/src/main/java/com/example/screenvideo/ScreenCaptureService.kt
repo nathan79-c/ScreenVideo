@@ -19,14 +19,6 @@ import android.os.IBinder
 import android.os.Build
 import androidx.core.app.NotificationCompat
 
-class ScreenCaptureService : Service() {
 
-    private var virtualDisplay: VirtualDisplay? = null
-    private var mediaProjection: MediaProjection? = null
-    private var mediaRecorder: MediaRecorder? = null
-    private var isRecording = false
-
-
-}
 
 
