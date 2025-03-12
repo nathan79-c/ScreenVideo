@@ -1,6 +1,8 @@
 package com.example.screenvideo.ui
 
 import android.content.Intent
+import android.media.projection.MediaProjection
+import android.media.projection.MediaProjectionManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -30,7 +32,19 @@ class MainActivity : ComponentActivity() {
                         onStartService = {  },
                         onStopService = {  }
                     )
+                    val mediaProjectionManager = getSystemService(MediaProjectionManager::class.java)
+                    var mediaProjection : MediaProjection
 
+                    val startMediaProjection = registerForActivityResult(
+                        ActivityResultContracts.StartActivityForResult()
+                    ) { result ->
+                        if (result.resultCode == RESULT_OK) {
+                            mediaProjection = mediaProjectionManager
+                                .getMediaProjection(result.resultCode, result.data!!)
+                        }
+                    }
+
+                    startMediaProjection.launch(mediaProjectionManager.createScreenCaptureIntent())
                 }
             }
         }

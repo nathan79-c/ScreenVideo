@@ -22,8 +22,6 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat.getSystemService
 
 class ScreenCaptureService:Service(){
-    val mediaProjectionManager = getSystemService(MediaProjectionManager::class.java)
-    var mediaProjection : MediaProjection? = null
     override fun onBind(p0: Intent?): IBinder? {
         return null
 
