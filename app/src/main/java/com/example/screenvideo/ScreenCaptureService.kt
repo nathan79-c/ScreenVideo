@@ -7,7 +7,9 @@ import android.content.Intent
 import android.hardware.display.VirtualDisplay
 import android.media.MediaRecorder
 import android.media.projection.MediaProjection
+import android.os.Handler
 import android.os.IBinder
+import android.view.Surface
 
 class ScreenCaptureService:Service(){
     private var mediaProjection: MediaProjection? = null
@@ -24,6 +26,21 @@ class ScreenCaptureService:Service(){
 
         return TODO("Provide the return value")
     }
+
+    fun createVirtualDisplay(
+        name: String,
+        width: Int,
+        height: Int,
+        dpi: Int,
+        flags: Int,
+        surface: Surface?,
+        callback: VirtualDisplay.Callback?,
+        handler: Handler?
+    ): VirtualDisplay?{
+
+        return null
+    }
+
 
 }
 
