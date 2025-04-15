@@ -1,17 +1,19 @@
 package com.example.screenvideo.data
 
-class FileRepository {
+interface FileRepository {
 
     fun createFile():FileSave{
-        return
+        return FileSave(
+
+            name = TODO(),
+            type = TODO(),
+            location = TODO()
+        )
+
     }
 
     fun deleteFile(fileSave: FileSave):Boolean{
 
-        if(fileSave){
-            return true
-        }else{
-            return false
-        }
+        return false
     }
 }
