@@ -30,7 +30,6 @@
         <activity
             android:name=".ui.MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
             android:theme="@style/Theme.ScreenVideo">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -41,7 +40,9 @@
         <service
             android:name=".ScreenCaptureService"
             android:foregroundServiceType="mediaProjection"
+            android:enabled="true"
             android:exported="false">
+
         </service>
 
     </application>
