@@ -21,6 +21,12 @@ class ScreenCaptureService:Service(){
     val displayMetrics = resources.displayMetrics
     private lateinit var mediaRecorder: MediaRecorder
 
+    // Callback pour le résultat de la permission
+    interface OnMediaProjectionResult {
+        fun onMediaProjectionGranted(mediaProjection: MediaProjection)
+        fun onFailure(error: String)
+    }
+    private var callback: OnMediaProjectionResult? = null
 
 
     override fun onBind(p0: Intent?): IBinder? {
@@ -32,9 +38,30 @@ class ScreenCaptureService:Service(){
 
         return TODO("Provide the return value")
     }
+    // Fonction pour démarrer la capture
+    fun startScreenCapture(callback: OnMediaProjectionResult) {
+        this.callback = callback
 
+        // Nécessite une Activity pour lancer la permission
+        val intent = mediaProjectionManager.createScreenCaptureIntent().apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) // Obligatoire depuis un Service
+        }
 
-
+        startActivity(intent)
+    }
+    // À appeler depuis l'Activity qui gère le résultat
+    fun handleActivityResult(resultCode: Int, data: Intent?) {
+        if (resultCode == RESULT_OK && data != null) {
+            mediaProjection = mediaProjectionManager.getMediaProjection(resultCode, data)
+            callback?.onMediaProjectionGranted(mediaProjection!!)
+        } else {
+            callback?.onFailure("Permission refusée ou données manquantes")
+        }
+    }
+    override fun onDestroy() {
+        mediaProjection?.stop()
+        super.onDestroy()
+    }
 
 
 }
