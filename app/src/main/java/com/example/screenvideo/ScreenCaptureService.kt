@@ -5,6 +5,7 @@ import android.app.Activity.RESULT_OK
 import android.app.Service
 import android.content.ComponentName
 import android.content.Intent
+import android.hardware.display.DisplayManager
 import android.hardware.display.VirtualDisplay
 import android.media.MediaRecorder
 import android.media.projection.MediaProjection
@@ -21,11 +22,7 @@ class ScreenCaptureService:Service(){
     val displayMetrics = resources.displayMetrics
     private lateinit var mediaRecorder: MediaRecorder
 
-    // Callback pour le résultat de la permission
-    interface OnMediaProjectionResult {
-        fun onMediaProjectionGranted(mediaProjection: MediaProjection)
-        fun onFailure(error: String)
-    }
+
     private var callback: OnMediaProjectionResult? = null
 
 
@@ -62,8 +59,27 @@ class ScreenCaptureService:Service(){
         mediaProjection?.stop()
         super.onDestroy()
     }
+    private fun createVirtualDisplay(): VirtualDisplay? {
+      //  val width =  displayMetrics.widthPixels; val height =  displayMetrics.heightPixels
+
+        return mediaProjection?.createVirtualDisplay(
+            "Screen",
+            displayMetrics.widthPixels,
+            displayMetrics.heightPixels,
+            resources.displayMetrics.densityDpi,
+            DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
+            mediaRecorder.surface,
+            null,
+            null
+        )
+    }
 
 
 }
 
 
+// Callback pour le résultat de la permission
+interface OnMediaProjectionResult {
+    fun onMediaProjectionGranted(mediaProjection: MediaProjection)
+    fun onFailure(error: String)
+}
