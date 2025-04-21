@@ -9,11 +9,10 @@ import android.hardware.display.DisplayManager
 import android.hardware.display.VirtualDisplay
 import android.media.MediaRecorder
 import android.media.projection.MediaProjection
+import android.media.projection.MediaProjection.Callback
 import android.media.projection.MediaProjectionManager
-import android.os.Handler
 import android.os.IBinder
-import android.view.Surface
-import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
+
 
 class ScreenCaptureService:Service(){
     val mediaProjectionManager = getSystemService(MediaProjectionManager::class.java)
@@ -59,11 +58,14 @@ class ScreenCaptureService:Service(){
         mediaProjection?.stop()
         super.onDestroy()
     }
+
+
+
     private fun createVirtualDisplay(): VirtualDisplay? {
-      //  val width =  displayMetrics.widthPixels; val height =  displayMetrics.heightPixels
+       // val width =  displayMetrics.widthPixels; val height =  displayMetrics.heightPixels
 
         return mediaProjection?.createVirtualDisplay(
-            "Screen",
+            "ScreenCapture",
             displayMetrics.widthPixels,
             displayMetrics.heightPixels,
             resources.displayMetrics.densityDpi,
@@ -73,7 +75,12 @@ class ScreenCaptureService:Service(){
             null
         )
     }
-
+    private fun releaseResources() {
+        mediaRecorder.release()
+        virtualDisplay?.release()
+        mediaProjection?.unregisterCallback(callback as Callback)
+        mediaProjection = null
+    }
 
 }
 
