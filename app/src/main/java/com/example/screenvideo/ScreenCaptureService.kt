@@ -18,6 +18,8 @@ import android.provider.MediaStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileInputStream
@@ -75,6 +77,19 @@ class ScreenCaptureService:Service(){
         mediaProjection?.stop()
         super.onDestroy()
     }
+    private val mediaProjectionCallback = object : MediaProjection.Callback() {
+        override fun onStop() {
+            super.onStop()
+            releaseResources()
+            stopService()
+            saveToGallery()
+        }
+    }
+    private fun stopService() {
+        _isServiceRunning.value = false
+        stopForeground(STOP_FOREGROUND_REMOVE)
+        stopSelf()
+    }
 
 
     private fun createVirtualDisplay(): VirtualDisplay? {
@@ -125,6 +140,17 @@ class ScreenCaptureService:Service(){
                 }
             }
         }
+    }
+    companion object {
+        private val _isServiceRunning = MutableStateFlow(false)
+        val isServiceRunning = _isServiceRunning.asStateFlow()
+
+        private const val VIDEO_FRAME_RATE = 30
+        private const val VIDEO_BIT_RATE_KILOBITS = 512
+
+        const val START_RECORDING = "START_RECORDING"
+        const val STOP_RECORDING = "STOP_RECORDING"
+        const val KEY_RECORDING_CONFIG = "KEY_RECORDING_CONFIG"
     }
 
 }
