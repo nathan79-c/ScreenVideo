@@ -28,8 +28,14 @@ class ScreenCaptureService:Service(){
     var mediaProjection: MediaProjection?= null
     private var virtualDisplay: VirtualDisplay? = null
     val displayMetrics = resources.displayMetrics
-    private lateinit var mediaRecorder: MediaRecorder
     private var callback: OnMediaProjectionResult? = null
+    private val mediaRecorder by lazy {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            MediaRecorder(applicationContext)
+        } else {
+            MediaRecorder()
+        }
+    }
 
 
     override fun onBind(p0: Intent?): IBinder? {
